@@ -20,11 +20,10 @@ const fileArg = function(){
 
 var eventEmitter = new events.EventEmitter();
 
-privateFns.watch = function(){
+exports.watch = function(){
 	fs.watch( fileArg, function ( curr, prev ) {
    		exports.process();
 	});
-
 }
 
 exports.process = function(fileName){
@@ -41,7 +40,7 @@ exports.process = function(fileName){
 	    eventEmitter.emit('error',err);
 	});
 
-	readableStream.on('end', function() {
+	readableStream.on('end', function(){
 	    var linesArray = data.match(/[^\s]+/g);
 		
 		for (var item in linesArray){
@@ -53,12 +52,8 @@ exports.process = function(fileName){
 				eventEmitter.emit('data-error',prsd);
 			}
 		}
-
 	    eventEmitter.emit('end',data);
 	});
 
 	return eventEmitter;
 }
-
-exports.process();
-privateFns.watch();
